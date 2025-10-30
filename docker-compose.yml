@@ -1,0 +1,43 @@
+
+services:
+  
+  # --- Serviço 1: O Banco de Dados PostgreSQL ---
+  db:
+    image: postgres:15-alpine # Imagem oficial do Postgres (versão 15, leve)
+    container_name: projeto-db-local
+    restart: always
+    environment:
+      # Define as credenciais do seu banco de dados
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: sua-senha-forte-aqui # !! TROQUE ISSO POR UMA SENHA !!
+      POSTGRES_DB: catalogojogos
+    ports:
+      # Mapeia a porta 5432 do container para a porta 5432 da sua máquina
+      # Permite que você se conecte ao banco de fora (ex: com SQLTools)
+      - "5432:5432"
+    volumes:
+      # Monta o script de inicialização
+      # É assim que o 'init.sql' é executado na primeira vez
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # --- Serviço 2: A sua API Node.js ---
+  api:
+    container_name: projeto-api-local
+    restart: always
+    # Constrói a imagem da API usando o 'Dockerfile' na pasta atual
+    build: . 
+    ports:
+      # Mapeia a porta 3000 do container para a porta 3000 da sua máquina
+      # Permite que você acesse a API em http://localhost:3000
+      - "3000:3000"
+    environment:
+      # Passa as credenciais do banco PARA a sua aplicação Node.js
+      # O seu código 'index.js' vai ler essas variáveis
+      DB_HOST: db # <-- 'db' é o nome do serviço de banco acima
+      DB_USER: admin
+      DB_PASSWORD: sua-senha-forte-aqui # !! USE A MESMA SENHA DE CIMA !!
+      DB_DATABASE: catalogojogos
+      DB_PORT: 5432
+    depends_on:
+      # Garante que o serviço 'db' inicie ANTES do serviço 'api'
+      - db
