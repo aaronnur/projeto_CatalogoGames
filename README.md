@@ -103,3 +103,5 @@ Deleta um jogo específico.
 GET /report
 
 Retorna um relatório estatístico (JSON) sobre a coleção, gerado pela função Lambda.
+
+https://youtu.be/534AEi3u9Ao
