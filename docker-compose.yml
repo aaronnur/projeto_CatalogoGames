@@ -9,7 +9,7 @@ services:
     environment:
       # Define as credenciais do seu banco de dados
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: sua-senha-forte-aqui # !! TROQUE ISSO POR UMA SENHA !!
+      POSTGRES_PASSWORD: sua-senha
       POSTGRES_DB: catalogojogos
     ports:
       # Mapeia a porta 5432 do container para a porta 5432 da sua máquina
